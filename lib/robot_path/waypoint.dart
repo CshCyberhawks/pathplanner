@@ -309,13 +309,24 @@ class Waypoint {
     }
   }
 
-
   Map<String, dynamic> toJsonScrewYou() {
     return {
       'point': {
         'x': anchorPoint.x,
         'y': anchorPoint.y,
       },
+      'prevControl': prevControl == null
+          ? null
+          : {
+              'x': prevControl!.x,
+              'y': prevControl!.y,
+            },
+      'nextControl': nextControl == null
+          ? null
+          : {
+              'x': nextControl!.x,
+              'y': nextControl!.y,
+            },
     };
   }
 

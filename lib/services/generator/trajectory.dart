@@ -31,6 +31,10 @@ class Trajectory {
   }
 
   String getWPILibJSON() {
+    return jsonEncode(states);
+  }
+
+  String getWeirdJSON() {
     return jsonEncode(states, toEncodable: (value) {
       if (value is TrajectoryState) {
         return value.toJsonScrewYou();

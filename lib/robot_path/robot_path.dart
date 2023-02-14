@@ -135,9 +135,11 @@ class RobotPath {
         Directory jsonDir = Directory(join(saveDir.path, 'generatedJSON'));
         if (!jsonDir.existsSync()) jsonDir.createSync(recursive: true);
         File jsonFile = File(join(jsonDir.path, '$name.wpilib.json'));
-        File realJsonFile = File(join(jsonDir.path, '$name.waypoints.wpilib.json'));
-        realJsonFile.writeAsString(Trajectory.generateGoodJson(this));
+        File waypointsFile = File(join(jsonDir.path, '$name.waypoints.wpilib.json'));
+        File smallerTrajFile = File(join(jsonDir.path, '$name.small.wpilib.json'));
+        waypointsFile.writeAsString(Trajectory.generateGoodJson(this));
         jsonFile.writeAsString(generatedTrajectory.getWPILibJSON());
+        smallerTrajFile.writeAsString(generatedTrajectory.getWeirdJSON());
       }
 
       if (generateCSV) {

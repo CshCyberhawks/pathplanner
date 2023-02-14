@@ -31,7 +31,12 @@ class Trajectory {
   }
 
   String getWPILibJSON() {
-    return jsonEncode(states);
+    return jsonEncode(states, toEncodable: (value) {
+      if (value is TrajectoryState) {
+        return value.toJsonScrewYou();
+      }
+      return '';
+    });
   }
 
   String getCSV() {
@@ -42,6 +47,29 @@ class Trajectory {
     }
 
     return csv;
+  }
+
+  static String generateGoodJson(RobotPath path) {
+    List<Waypoint> currentPath = [];
+
+    for (int i = 0; i < path.waypoints.length; i++) {
+      Waypoint w = path.waypoints[i];
+
+      currentPath.add(w);
+    }
+
+    String json = '';
+    for (int i = 0; i < currentPath.length; i++) {
+      json += jsonEncode(currentPath[i], toEncodable: (value) {
+        if (value is Waypoint) {
+          return value.toJsonScrewYou();
+        }
+        return '';
+      });
+    }
+    print('json: $json');
+
+    return json;
   }
 
   static Future<Trajectory> generateFullTrajectory(RobotPath path) async {
@@ -419,6 +447,23 @@ class TrajectoryState {
     lerpedState.deltaPos = GeometryUtil.numLerp(deltaPos, endVal.deltaPos, t);
 
     return lerpedState;
+  }
+
+  Map<String, dynamic> toJsonScrewYou() {
+    return {
+      'time': timeSeconds,
+      'pose': {
+        'rotation': {
+          'radians': headingRadians,
+        },
+        'translation': {
+          'x': translationMeters.x,
+          'y': translationMeters.y,
+        },
+      },
+      'curvature': curvatureRadPerMeter.isFinite ? curvatureRadPerMeter : 0,
+      'holonomicRotation': holonomicRotation,
+    };
   }
 
   Map<String, dynamic> toJson() {

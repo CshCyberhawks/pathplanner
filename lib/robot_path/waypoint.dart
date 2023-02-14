@@ -309,9 +309,19 @@ class Waypoint {
     }
   }
 
+
+  Map<String, dynamic> toJsonScrewYou() {
+    return {
+      'point': {
+        'x': anchorPoint.x,
+        'y': anchorPoint.y,
+      },
+    };
+  }
+
   Map<String, dynamic> toJson() {
     return {
-      'anchorPoint': {
+      'point': {
         'x': anchorPoint.x,
         'y': anchorPoint.y,
       },

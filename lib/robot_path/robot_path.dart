@@ -130,10 +130,13 @@ class RobotPath {
 
       generatedTrajectory = await Trajectory.generateFullTrajectory(this);
 
+      print('generating json');
       if (generateJSON) {
         Directory jsonDir = Directory(join(saveDir.path, 'generatedJSON'));
         if (!jsonDir.existsSync()) jsonDir.createSync(recursive: true);
         File jsonFile = File(join(jsonDir.path, '$name.wpilib.json'));
+        File realJsonFile = File(join(jsonDir.path, '$name.waypoints.wpilib.json'));
+        realJsonFile.writeAsString(Trajectory.generateGoodJson(this));
         jsonFile.writeAsString(generatedTrajectory.getWPILibJSON());
       }
 

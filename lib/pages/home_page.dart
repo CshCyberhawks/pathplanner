@@ -588,6 +588,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       bool result = await path.savePath(
           _getPathsDir(_projectDir!), _generateJSON, _generateCSV);
 
+      print('called save path');
       if (!result) {
         showDialog(
           context: this.context,

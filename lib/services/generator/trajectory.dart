@@ -6,6 +6,15 @@ import 'package:pathplanner/robot_path/waypoint.dart';
 import 'package:pathplanner/services/generator/geometry_util.dart';
 import 'package:pathplanner/services/generator/math_util.dart';
 
+num wrapAroundAngles(num angle) {
+  angle %= 360;
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  return angle;
+}
+
 class Trajectory {
   static const double resolution = 0.004;
   late final List<TrajectoryState> states;
@@ -35,12 +44,12 @@ class Trajectory {
   }
 
   String getWeirdJSON() {
-    return jsonEncode(states, toEncodable: (value) {
+    return '''{ "startPosition": { "x": ${states[0].translationMeters.x}, "y": ${states[0].translationMeters.y}, "angle": ${wrapAroundAngles(states[0].headingRadians * (180 / pi))}}, "positions": ${jsonEncode(states, toEncodable: (value) {
       if (value is TrajectoryState) {
         return value.toJsonScrewYou();
       }
       return '';
-    });
+    })} }''';
   }
 
   String getCSV() {
@@ -62,8 +71,12 @@ class Trajectory {
       currentPath.add(w);
     }
 
-    String json = '';
+    String json = '[';
+
     for (int i = 0; i < currentPath.length; i++) {
+      if (i != 0) {
+        json += ', ';
+      }
       json += jsonEncode(currentPath[i], toEncodable: (value) {
         if (value is Waypoint) {
           return value.toJsonScrewYou();
@@ -71,7 +84,8 @@ class Trajectory {
         return '';
       });
     }
-    print('json: $json');
+
+    json += ']';
 
     return json;
   }
@@ -455,18 +469,9 @@ class TrajectoryState {
 
   Map<String, dynamic> toJsonScrewYou() {
     return {
-      'time': timeSeconds,
-      'pose': {
-        'rotation': {
-          'radians': headingRadians,
-        },
-        'translation': {
-          'x': translationMeters.x,
-          'y': translationMeters.y,
-        },
-      },
-      'curvature': curvatureRadPerMeter.isFinite ? curvatureRadPerMeter : 0,
-      'holonomicRotation': holonomicRotation,
+      'angle': wrapAroundAngles(headingRadians * (180 / pi)),
+      'x': translationMeters.x,
+      'y': translationMeters.y,
     };
   }
 

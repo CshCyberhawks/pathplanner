@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:pathplanner/robot_path/stop_event.dart';
+import 'package:pathplanner/services/generator/trajectory.dart';
 
 class Waypoint {
   Point anchorPoint;
@@ -312,21 +313,10 @@ class Waypoint {
   Map<String, dynamic> toJsonScrewYou() {
     return {
       'point': {
-        'x': anchorPoint.x,
-        'y': anchorPoint.y,
-      },
-      'prevControl': prevControl == null
-          ? null
-          : {
-              'x': prevControl!.x,
-              'y': prevControl!.y,
-            },
-      'nextControl': nextControl == null
-          ? null
-          : {
-              'x': nextControl!.x,
-              'y': nextControl!.y,
-            },
+        'angle': wrapAroundAngles(90 - (holonomicAngle ?? 0)),
+        'x': -anchorPoint.y,
+        'y': anchorPoint.x,
+      }
     };
   }
 

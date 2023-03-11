@@ -313,9 +313,9 @@ class Waypoint {
   Map<String, dynamic> toJsonScrewYou() {
     return {
       'point': {
-        'angle': wrapAroundAngles(90 - (holonomicAngle ?? 0)),
-        'x': -anchorPoint.y,
-        'y': anchorPoint.x,
+        'angle': getHeadingDegrees(),
+        'x': anchorPoint.x,
+        'y': anchorPoint.y,
       }
     };
   }

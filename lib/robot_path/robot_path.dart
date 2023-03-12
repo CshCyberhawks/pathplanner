@@ -65,10 +65,14 @@ class RobotPath {
   RobotPath.fromJson(Map<String, dynamic> json)
       : waypoints = [],
         markers = [] {
+    print('Waypoint load');
     for (Map<String, dynamic> pointJson in json['waypoints']) {
+      print('Waypoint');
+      print(pointJson);
       waypoints.add(Waypoint.fromJson(pointJson));
     }
 
+    print('Marker load');
     for (Map<String, dynamic> markerJson in json['markers'] ?? []) {
       EventMarker marker = EventMarker.fromJson(markerJson);
       if (marker.position <= waypoints.length - 1) {
@@ -135,8 +139,10 @@ class RobotPath {
         Directory jsonDir = Directory(join(saveDir.path, 'generatedJSON'));
         if (!jsonDir.existsSync()) jsonDir.createSync(recursive: true);
         File jsonFile = File(join(jsonDir.path, '$name.wpilib.json'));
-        File waypointsFile = File(join(jsonDir.path, '$name.waypoints.wpilib.json'));
-        File smallerTrajFile = File(join(jsonDir.path, '$name.small.wpilib.json'));
+        File waypointsFile =
+            File(join(jsonDir.path, '$name.waypoints.wpilib.json'));
+        File smallerTrajFile =
+            File(join(jsonDir.path, '$name.small.wpilib.json'));
         waypointsFile.writeAsString(Trajectory.generateGoodJson(this));
         jsonFile.writeAsString(generatedTrajectory.getWPILibJSON());
         smallerTrajFile.writeAsString(generatedTrajectory.getWeirdJSON());

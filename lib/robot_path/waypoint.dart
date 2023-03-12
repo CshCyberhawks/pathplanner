@@ -322,7 +322,7 @@ class Waypoint {
 
   Map<String, dynamic> toJson() {
     return {
-      'point': {
+      'anchorPoint': {
         'x': anchorPoint.x,
         'y': anchorPoint.y,
       },

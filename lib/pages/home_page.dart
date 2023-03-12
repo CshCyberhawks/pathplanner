@@ -529,9 +529,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (e.path.endsWith('.path')) {
         String json = File(e.path).readAsStringSync();
         try {
+          print('Start load');
           RobotPath p = RobotPath.fromJson(jsonDecode(json));
+          print('1');
           p.name = basenameWithoutExtension(e.path);
+          print('2');
           paths.add(p);
+          print('End load');
         } catch (ex, stack) {
           // Path is not in correct format. Don't add it and notify user
           showDialog(

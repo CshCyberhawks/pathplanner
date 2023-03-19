@@ -31,12 +31,12 @@ class _UpdateCardState extends State<UpdateCard> with TickerProviderStateMixin {
       curve: Curves.ease,
     ));
 
-    GitHubAPI.isUpdateAvailable(widget.currentVersion).then((value) {
-      setState(() {
-        _visibile = value;
-        _updateController.forward();
-      });
-    });
+    // GitHubAPI.isUpdateAvailable(widget.currentVersion).then((value) {
+    //   setState(() {
+    //     _visibile = value;
+    //     _updateController.forward();
+    //   });
+    // });
   }
 
   @override
